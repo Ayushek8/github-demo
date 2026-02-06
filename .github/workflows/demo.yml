@@ -2,6 +2,8 @@ name: CI + Security Pipeline (FAST)
 
 on:
   push:
+   branches: 
+     - main
   pull_request:
   workflow_dispatch:
 
