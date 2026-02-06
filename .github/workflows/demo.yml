@@ -24,11 +24,14 @@ jobs:
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
 
-      - name: OWASP Dependency Check (FAST & STABLE)
+      - name: OWASP Dependency Check (FIXED exit code 12)
         run: |
-         mkdir -p dependency-check-report
+         rm -rf dependency-check-report
+         mkdir dependency-check-report
+         chmod -R 777 dependency-check-report
 
          docker run --rm \
+         -u $(id -u):$(id -g) \
          -v "$PWD":/src:ro \
          -v "$PWD/dependency-check-report":/report \
          owasp/dependency-check:12.1.0 \
