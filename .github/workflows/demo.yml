@@ -6,31 +6,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  security-pipeline:
+  security:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout
-      - name: Checkout source code
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Java
+      # Build step (host Java)
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # 3️⃣ Build & Test
       - name: Build with Maven
         run: mvn clean test
 
-      # 4️⃣ GITLEAKS – Secret Scanning
+      # Gitleaks
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         continue-on-error: true
 
-      # 5️⃣ OWASP Dependency Check
+      # OWASP Dependency Check (DOCKER ACTION)
       - name: OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
@@ -41,8 +39,8 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
-      # 6️⃣ Upload OWASP Report
-      - name: Upload OWASP Report
+      # Upload report
+      - name: Upload OWASP report
         uses: actions/upload-artifact@v4
         with:
           name: owasp-dependency-report
