@@ -32,6 +32,7 @@ jobs:
             -v "$PWD/dependency-check-report":/report \
             owasp/dependency-check \
             --scan /src \
+            --nvdApiKey "${{ secrets.NVD_API_KEY }}" \
             --format HTML \
             --out /report \
             --disableNodeAudit \
